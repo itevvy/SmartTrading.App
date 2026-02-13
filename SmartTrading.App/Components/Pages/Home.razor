@@ -3,6 +3,17 @@
 <div class="dashboard-wrapper">
     @if (!SettingsSvc.IsVirtual)
     {
+        <div class="alert alert-dark border-0 shadow-sm mb-4 d-flex justify-content-between align-items-center rounded-4 p-3 animate-fade-in">
+            <div class="d-flex align-items-center">
+                <div class="mode-indicator real me-3"></div>
+                <div>
+                    <h5 class="fw-bold mb-0 text-white">실전 투자 서비스 접속 중</h5>
+                    <small class="text-white-50">Koreainvestment Real-time Server</small>
+                </div>
+            </div>
+            <span class="badge rounded-pill bg-danger px-3 py-2">LIVE</span>
+        </div>
+
         <div class="row mb-4">
             <div class="col-md-6 mb-3">
                 <div class="index-card kospi">
@@ -40,17 +51,17 @@
     }
     else
     {
-        <div class="alert alert-secondary border-0 shadow-sm mb-4 p-4" role="alert">
+        <div class="alert alert-light border-0 shadow-sm mb-4 d-flex justify-content-between align-items-center rounded-4 p-4 animate-fade-in">
             <div class="d-flex align-items-center">
-                <div class="me-3 fs-2">💡</div>
+                <div class="mode-indicator virtual me-3"></div>
                 <div>
-                    <h5 class="alert-heading fw-bold mb-1">모의투자 모드 이용 중</h5>
-                    <p class="mb-0 text-muted">한국투자증권 모의투자 서버는 시장 지수(KOSPI/KOSDAQ) 데이터를 제공하지 않습니다. 실전 모드에서 확인 가능합니다.</p>
+                    <h5 class="fw-bold mb-1 text-success">모의 투자 모드 이용 중</h5>
+                    <p class="mb-0 text-muted small">한국투자증권 모의 서버는 지수(KOSPI/KOSDAQ) 데이터를 제공하지 않습니다.</p>
                 </div>
             </div>
+            <div class="fs-2">🚀</div>
         </div>
     }
-
     <div class="row">
         <div class="col-12">
             <div class="card p-4 bg-white border-0 shadow-sm rounded-4">
@@ -72,67 +83,86 @@
 </div>
 
 <style>
-    /* 전체 배경 및 여백 설정 */
+    /* 전체 배경 및 컨테이너 */
     .dashboard-wrapper {
         padding: 25px;
-        background-color: #f4f6f9;
+        background-color: #f8f9fa;
         min-height: 100vh;
     }
 
     /* 지수 카드 디자인 */
     .index-card {
         background: #ffffff;
-        padding: 35px 25px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        padding: 30px 25px;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         text-align: center;
-        border: 1px solid rgba(0,0,0,0.02);
-    }
-
-        .index-card .label {
-            font-size: 0.95rem;
-            color: #adb5bd;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .index-card .price {
-            font-size: 3rem;
-            font-weight: 850;
-            color: #212529;
-            margin-bottom: 10px;
-            letter-spacing: -1.5px;
-        }
-
-        .index-card .change {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-    /* 상승/하락 컬러 시스템 */
-    .text-up {
-        color: #f22c3d !important;
-    }
-    /* 상승: 한국형 Red */
-    .text-down {
-        color: #0066ff !important;
-    }
-    /* 하락: 한국형 Blue */
-
-    .loading-text {
-        color: #dee2e6;
-        font-size: 0.9rem;
-        padding: 20px 0;
-    }
-
-    /* 애니메이션 효과 */
-    .index-card {
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0,0,0,0.03);
     }
 
         .index-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.07);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
         }
+
+        .index-card .label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .index-card .price {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #212529;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+    /* 상승/하락 컬러 (한국형) */
+    .text-up {
+        color: #e83e8c !important;
+    }
+    /* 상승: Pink-Red */
+    .text-down {
+        color: #0d6efd !important;
+    }
+    /* 하락: Blue */
+
+    /* 모드 인디케이터 */
+    .mode-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+        .mode-indicator.real {
+            background-color: #ff4d4d;
+            box-shadow: 0 0 10px #ff4d4d;
+        }
+
+        .mode-indicator.virtual {
+            background-color: #28a745;
+            box-shadow: 0 0 10px #28a745;
+        }
+
+    /* 애니메이션 */
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>

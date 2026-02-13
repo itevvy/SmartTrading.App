@@ -1,21 +1,51 @@
-.page {
+/* 상단바 레이아웃 */
+.header-bar {
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-header {
-    background-color: #1b1b1b; /* 다크한 네이비/블랙 계열 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    align-items: center;
+    justify-content: space-between;
+    height: 65px;
+    background-color: #1b1b1b; /* 다크 테마 유지 */
+    color: white;
+    position: sticky;
+    top: 0;
     z-index: 1000;
 }
 
-main {
+/* 중앙 메뉴 영역 */
+.header-center {
     flex: 1;
-    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
 }
 
-.content {
-    max-width: 1400px; /* 차트 가독성을 위해 넓게 설정 */
-    margin: 0 auto;
+/* 💡 배지 폰트 강화 */
+.mode-status-container .badge {
+    font-size: 0.9rem;
+    font-weight: 700; /* 글씨를 더 두껍게 */
+    letter-spacing: 0.5px;
+}
+
+/* 본문 배경색 */
+main {
+    flex: 1;
+    background-color: #f8f9fa;
+}
+
+/* 애니메이션: 실전투자 시에만 작동 */
+@keyframes pulse-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.6);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+.animate-pulse {
+    animation: pulse-red 2s infinite;
 }

@@ -38,12 +38,15 @@ public partial class Home
     /// <summary>
     /// 코스피 지수 데이터 모델
     /// </summary>
-    private KisIndexOutput? _kospi; // 💡 유지
+    private KisIndexOutput? _kospi;
 
     /// <summary>
     /// 코스닥 지수 데이터 모델
     /// </summary>
-    private KisIndexOutput? _kosdaq; // 💡 유지
+    private KisIndexOutput? _kosdaq;
+
+    private KisQuoteOutput? _featuredStock;
+    private readonly string _featuredStockCode = "005930"; // 삼성전자 (샘플)
 
     #endregion
 
@@ -54,31 +57,45 @@ public partial class Home
     /// </summary>
     protected override async Task OnInitializedAsync()
     {
-        // SettingsSvc의 실시간 설정값을 확인합니다.
-        // 사용자가 설정 화면에서 바꾼 '모의투자' 여부에 따라 동작합니다.
-        if (!SettingsSvc.IsVirtual)
+        try
         {
-            try
+            List<Task> tasks = [];
+
+            // 1. [실전 모드] 지수 데이터 호출 (모의투자는 미지원으로 skip됨)
+            if (!SettingsSvc.IsVirtual)
             {
-                // 1. 코스피(0001)와 코스닥(1001) 지수 조회를 병렬 실행
-                var kospiTask = QuoteService.GetIndexPriceAsync("0001");
-                var kosdaqTask = QuoteService.GetIndexPriceAsync("1001");
-
-                // 2. 모든 비동기 작업 대기
-                await Task.WhenAll(kospiTask, kosdaqTask);
-
-                // 3. 결과값을 변수에 할당
-                _kospi = await kospiTask;
-                _kosdaq = await kosdaqTask;
-
-                // 4. 데이터 로드 완료 후 UI 강제 갱신
-                await InvokeAsync(StateHasChanged);
+                tasks.Add(LoadIndexAsync());
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[Dashboard 로딩 오류] {ex.Message}");
-            }
+
+            // 2. [공통] 관심 종목 현재가 호출 (모의/실전 모두 가능)
+            tasks.Add(LoadFeaturedStockAsync());
+
+            await Task.WhenAll(tasks);
         }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[초기화 에러] {ex.Message}");
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// 지수 데이터 로드
+    /// </summary>
+    private async Task LoadIndexAsync()
+    {
+        _kospi = await QuoteService.GetIndexPriceAsync("0001");
+        _kosdaq = await QuoteService.GetIndexPriceAsync("1001");
+    }
+
+    /// <summary>
+    /// 관심 종목 데이터 로드
+    /// </summary>
+    private async Task LoadFeaturedStockAsync()
+    {
+        // SettingsService의 IsVirtual 설정에 맞춰 KisQuoteService가 알아서 URL을 바꿉니다.
+        _featuredStock = await QuoteService.GetCurrentPriceAsync(_featuredStockCode);
     }
 
     /// <summary>

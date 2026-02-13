@@ -34,6 +34,11 @@ public class SettingsService
     private const string KisVirtualAppKeyName = "kis_virtual_appkey";
     private const string KisVirtualSecretName = "kis_virtual_secret";
 
+    /// <summary>
+    /// 설정 변경 시 UI를 갱신하기 위한 이벤트입니다.
+    /// </summary>
+    public event Action? OnSettingsChanged;
+
     #endregion
 
     #region Properties (일반 설정)
@@ -42,11 +47,15 @@ public class SettingsService
     /// 모의투자 모드 활성화 여부를 가져오거나 설정
     /// DI 구조를 유지하기 위해 인스턴스 멤버로 두되 경고를 억제합니다.
     /// </summary>
-    [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool IsVirtual
     {
-        get => Preferences.Default.Get(IsVirtualKey, true); // 기본값은 안전하게 '모의투자(true)'
-        set => Preferences.Default.Set(IsVirtualKey, value);
+        get => Preferences.Default.Get(IsVirtualKey, true);
+        set
+        {
+            Preferences.Default.Set(IsVirtualKey, value);
+            // 값이 바뀌면 등록된 모든 곳에 알림
+            OnSettingsChanged?.Invoke();
+        }
     }
 
     #endregion

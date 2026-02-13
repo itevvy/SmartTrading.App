@@ -1,48 +1,41 @@
 ﻿@inherits LayoutComponentBase
-@using Microsoft.Extensions.Configuration
-@inject IConfiguration Configuration
 
 <div class="page">
-    <header>
-        @* 상단 투자 모드 상태바 *@
-        <div class="status-bar d-flex justify-content-end align-items-center px-3 py-1 bg-dark">
-            @if (Configuration.GetValue<bool>("KisApi:IsVirtual"))
-            {
-                <span class="badge rounded-pill bg-warning text-dark">⚠️ 모의투자 접속 중</span>
-            }
-            else
-            {
-                <span class="badge rounded-pill bg-danger">🔴 실전투자 접속 중</span>
-            }
+    @* 상단 바: 로고, 메뉴, 상태 배지 *@
+    <header class="header-bar px-4 shadow-sm">
+        @* 1. 로고 영역 *@
+        <div class="header-left">
+            <span class="fs-4 fw-bold text-white">SmartTrading</span>
         </div>
-        <NavMenu />
+
+        @* 2. 메뉴 영역 (중복 제목 제거됨) *@
+        <nav class="header-center">
+            <NavMenu />
+        </nav>
+
+        @* 3. 상태 표시 영역 (디자인 강화) *@
+        <div class="header-right">
+            <div class="mode-status-container">
+                @if (SettingsSvc.IsVirtual)
+                {
+                    @* 💡 [변경] 녹색 바탕에 흰색 글씨로 시인성 극대화 *@
+                    <span class="badge rounded-pill bg-success text-white px-3 py-2 shadow-sm">
+                        <i class="bi bi-shield-fill me-1"></i> 모의투자
+                    </span>
+                }
+                else
+                {
+                    <span class="badge rounded-pill bg-danger text-white px-3 py-2 animate-pulse shadow-sm">
+                        <i class="bi bi-lightning-fill me-1"></i> 실전투자
+                    </span>
+                }
+            </div>
+        </div>
     </header>
 
     <main>
-        <article class="content px-4">
+        <article class="content">
             @Body
         </article>
     </main>
 </div>
-
-<style>
-    .status-bar {
-        font-size: 0.75rem;
-        height: 28px;
-    }
-
-    .page {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    header {
-        z-index: 1000;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    main {
-        flex: 1;
-    }
-</style>
