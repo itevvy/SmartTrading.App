@@ -1,32 +1,35 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<nav class="navbar navbar-expand-md navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">SmartTrading.App</a>
+        <a class="navbar-brand" href="">🚀 SmartTrading</a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="bi bi-house-door"></span> 대시보드
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="chart-test">
+                        <span class="bi bi-graph-up"></span> 실시간 차트
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="trading">
+                        <span class="bi bi-currency-exchange"></span> 주식 주문
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="account">
+                        <span class="bi bi-wallet2"></span> 내 자산/잔고
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="settings">
+                        <span class="bi bi-gear"></span> 설정/보안
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="token-test">
-                <span class="bi bi-key-fill" aria-hidden="true"></span> 토큰 테스트
-            </NavLink>
-        </div>
-    </nav>
-</div>
+</nav>

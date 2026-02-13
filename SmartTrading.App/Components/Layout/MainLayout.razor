@@ -1,17 +1,48 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 
 <div class="page">
-    <div class="sidebar">
+    <header>
+        @* 상단 투자 모드 상태바 *@
+        <div class="status-bar d-flex justify-content-end align-items-center px-3 py-1 bg-dark">
+            @if (Configuration.GetValue<bool>("KisApi:IsVirtual"))
+            {
+                <span class="badge rounded-pill bg-warning text-dark">⚠️ 모의투자 접속 중</span>
+            }
+            else
+            {
+                <span class="badge rounded-pill bg-danger">🔴 실전투자 접속 중</span>
+            }
+        </div>
         <NavMenu />
-    </div>
+    </header>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+<style>
+    .status-bar {
+        font-size: 0.75rem;
+        height: 28px;
+    }
+
+    .page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    header {
+        z-index: 1000;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    main {
+        flex: 1;
+    }
+</style>

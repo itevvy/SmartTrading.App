@@ -1,9 +1,11 @@
 ﻿#region using Directives
 
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
+using Microsoft.Extensions.Logging;
+using SmartTrading.App.Services.Common;
 using SmartTrading.App.Services.Kis;
+
+using System.Reflection;
 
 #endregion
 
@@ -41,6 +43,10 @@ public static class MauiProgram
         // ---------------------------------------------------------
         builder.Services.AddHttpClient<KisAuthService>();
         builder.Services.AddHttpClient<KisQuoteService>();
+
+        // 웹소켓은 계속 연결되어야 하므로 Singleton 권장
+        builder.Services.AddSingleton<KisRealtimeService>();
+        builder.Services.AddSingleton<SettingsService>();
 
         // MAUI Blazor 필수 서비스
         builder.Services.AddMauiBlazorWebView();

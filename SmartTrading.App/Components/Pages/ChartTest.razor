@@ -1,0 +1,75 @@
+@page "/chart-test"
+@using SmartTrading.App.Models
+
+<div class="header-container">
+    <h3>📊 삼성전자(005930) 차트</h3>
+
+    <div class="btn-group" role="group">
+        <button type="button" class="btn @GetButtonClass("D")" @onclick='() => ChangePeriod("D")'>일봉</button>
+        <button type="button" class="btn @GetButtonClass("W")" @onclick='() => ChangePeriod("W")'>주봉</button>
+        <button type="button" class="btn @GetButtonClass("M")" @onclick='() => ChangePeriod("M")'>월봉</button>
+    </div>
+</div>
+
+<div class="chart-container">
+    @if (_isLoading)
+    {
+        <div class="loading-box">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>데이터 불러오는 중...</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger">
+            <strong>🚫 차트 불러오기 실패</strong><br />
+            <p>@_errorMessage</p>
+        </div>
+    }
+    else if (_stockData.Count > 0)
+    {
+        <ApexChart TItem="StockData"
+                   Title="@_chartTitle"
+                   Options="_options"
+                   @ref="_chart">
+
+            <ApexCandleSeries TItem="StockData"
+                              Name="주가"
+                              Items="_stockData"
+                              XValue="@(e => e.Date.ToString("yyyy-MM-dd"))"
+                              Open="@(e => e.Open)"
+                              High="@(e => e.High)"
+                              Low="@(e => e.Low)"
+                              Close="@(e => e.Close)" />
+        </ApexChart>
+    }
+</div>
+
+<style>
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .chart-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        min-height: 450px;
+    }
+
+    .loading-box {
+        text-align: center;
+        padding-top: 100px;
+        color: #666;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 15px;
+    }
+</style>

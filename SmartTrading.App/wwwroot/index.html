@@ -24,7 +24,39 @@
     </div>
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
+    <script src="_content/Blazor-ApexCharts/js/apex-charts.min.js"></script>
+    <script src="_content/Blazor-ApexCharts/js/blazor-apex-charts.js"></script>
 
+    <script>
+        window.formatNumber = function (value) {
+            if (value === undefined || value === null)
+            {
+                return "";
+            }
+
+            return Number(value).toLocaleString();
+        }
+
+        window.customTooltip = function (e) {
+            var dataPoint = e.w.globals.initialSeries[e.seriesIndex].data[e.dataPointIndex];
+
+            var o = Number(dataPoint.y[0]).toLocaleString();
+            var h = Number(dataPoint.y[1]).toLocaleString();
+            var l = Number(dataPoint.y[2]).toLocaleString();
+            var c = Number(dataPoint.y[3]).toLocaleString();
+            var dateStr = dataPoint.x;
+
+            return `
+                <div class="apexcharts-tooltip-box" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
+                    <div>Open: <b>${o}</b></div>
+                    <div>High: <b>${h}</b></div>
+                    <div>Low: <b>${l}</b></div>
+                    <div style="padding-bottom: 5px; border-bottom: 1px solid #eee;">Close: <b>${c}</b></div>
+                    <div style="margin-top: 5px; font-size: 12px; color: #888;">${dateStr}</div>
+                </div>
+            `;
+        }
+    </script>
 </body>
 
 </html>
