@@ -219,5 +219,6 @@ public partial class ChartTest
     /// <param name="period">버튼의 기준 기간</param>
     private string GetButtonClass(string period) => _currentPeriod == period ? "btn-primary" : "btn-outline-primary";
 
+
     #endregion
 }

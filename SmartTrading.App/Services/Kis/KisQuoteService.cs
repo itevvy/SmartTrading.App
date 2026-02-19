@@ -37,8 +37,6 @@ public class KisQuoteService(HttpClient httpClient, KisAuthService authService, 
 
     #region Public Methods
 
-    #region Public Methods
-
     /// <summary>
     /// [1] 시장 지수 조회 (KOSPI: 0001, KOSDAQ: 1001)
     /// </summary>
@@ -126,7 +124,32 @@ public class KisQuoteService(HttpClient httpClient, KisAuthService authService, 
         return result?.ResultCode == "0" ? result.Output : null;
     }
 
-    #endregion
+    /// <summary>
+    /// 주식 당일 분봉 조회 (1분, 3분, 5분 등)
+    /// </summary>
+    public async Task<List<KisDailyPriceDetail>?> GetMinutePriceAsync(string stockCode, int minute)
+    {
+        try
+        {
+            var token = await _authService.GetAccessTokenAsync();
+            // 분봉 조회 URL (주식당일분봉조회)
+            var url = $"{RealUrl}/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice" +
+                      $"?FID_ETC_CLS_CODE=&FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD={stockCode}" +
+                      $"&FID_PW_DATA_INCU_YN=N&FID_HOUR_CLS_CODE={minute:D3}"; // 001, 003 등
+
+            var req = new HttpRequestMessage(HttpMethod.Get, url);
+            req.Headers.Add("authorization", $"Bearer {token}");
+            req.Headers.Add("appkey", await _settingsSvc.GetKisAppKeyAsync(false));
+            req.Headers.Add("appsecret", await _settingsSvc.GetKisSecretAsync(false));
+            req.Headers.Add("tr_id", "FHKST03010200");
+            req.Headers.Add("custtype", "P");
+
+            var res = await _httpClient.SendAsync(req);
+            var result = await res.Content.ReadFromJsonAsync<KisDailyPriceResponse>();
+            return result?.ResultCode == "0" ? result.Output : null;
+        }
+        catch { return null; }
+    }
 
     #endregion
 }

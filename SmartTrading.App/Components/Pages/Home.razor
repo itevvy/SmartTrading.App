@@ -20,7 +20,9 @@
                     <div class="label">KOSPI</div>
                     @if (_kospi != null)
                     {
-                        <div class="price">@_kospi.Price</div>
+                        <div class="price">
+                            @(decimal.TryParse(_kospi.Price, out var kVal) ? kVal.ToString("N2") : _kospi.Price)
+                        </div>
                         <div class="change @GetColorClass(_kospi.ChangeDir)">
                             @GetSign(_kospi.ChangeDir) @_kospi.Change (@_kospi.ChangeRate%)
                         </div>
@@ -36,7 +38,9 @@
                     <div class="label">KOSDAQ</div>
                     @if (_kosdaq != null)
                     {
-                        <div class="price">@_kosdaq.Price</div>
+                        <div class="price">
+                            @(decimal.TryParse(_kosdaq.Price, out var kVal) ? kVal.ToString("N2") : _kosdaq.Price)
+                        </div>
                         <div class="change @GetColorClass(_kosdaq.ChangeDir)">
                             @GetSign(_kosdaq.ChangeDir) @_kosdaq.Change (@_kosdaq.ChangeRate%)
                         </div>
